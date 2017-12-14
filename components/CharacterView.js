@@ -13,6 +13,7 @@ import Modal from './Modal'
 import CharacterInfo from './CharacterInfo';
 import CharacterStats from './CharacterStats';
 import CharacterButtons from './CharacterButtons';
+import CharacterSkills from './CharacterSkills';
 
 import styles from '../styles'
 import * as Actions from '../actions';
@@ -23,14 +24,31 @@ class CharacterView extends Component<{}> {
 
     const {dispatch} = props;
 
+    if (props.character && (props.navigation.state.params && props.navigation.state.params.characterName) !== props.character.Name) {
+        props.navigation.setParams({ characterName: props.character.Name });
+    }
+
     this.boundActionCreators = bindActionCreators(Actions, dispatch);
+  }
+
+  static navigationOptions = ({navigation}) => {
+    const title = navigation.state.params && navigation.state.params.characterName || 'Character Info';
+    return {
+      title
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.character && (this.props.navigation.state.params && this.props.navigation.state.params.characterName) !== nextProps.character.Name) {
+        this.props.navigation.setParams({ characterName: nextProps.character.Name });
+    }
   }
 
   render() {
     const {character, currentTab, modalInfo} = this.props;
 
     return (
-      <View style={[styles.container, {flexDirection: 'column', justifyContent: 'space-between'}]}>
+      <View style={[styles.container, {flexDirection: 'column', justifyContent: 'space-between', flex: 1, flexWrap: 'nowrap'}]}>
         <Modal
           isVisible={!!modalInfo}
           closeModal={this.boundActionCreators.closeModal}
@@ -45,6 +63,13 @@ class CharacterView extends Component<{}> {
           <CharacterStats
             character={character}
             onStatChange={this.boundActionCreators.updateCharacterInfo}
+            roller={this.boundActionCreators.roller}
+          />
+        }
+        {currentTab === 'Skills' &&
+          <CharacterSkills
+            character={character}
+            onSkillChange={this.boundActionCreators.updateCharacterInfo}
             roller={this.boundActionCreators.roller}
           />
         }

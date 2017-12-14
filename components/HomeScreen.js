@@ -22,8 +22,6 @@ class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     const {characters = {}} = this.props;
 
-    console.log('In home');
-
     return (
       <View style={{padding: 5,}}>
         {

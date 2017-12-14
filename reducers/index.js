@@ -25,15 +25,19 @@ const noCharacterState = {
 };
 
 const reducer = (state = noCharacterState, action) => {
-  const {type, info, index} = action;
+  const {type, info={}, index} = action;
+  const {field, value, name} = info;
 
   switch (type) {
     case UPDATE_CHARACTER_INFO:
       const currentCharacter = state.currentCharacter;
-      const {field, value} = info;
       return {...state, characters: {...state.characters, [currentCharacter]: {...state.characters[currentCharacter], [field]: value}}};
-    case ROLLER: 
+    case ROLLER:
       const {text, statValue} = action.rollInfo;
+
+      if ( statValue === 0 ) {
+        return {...state, modalInfo: 'Invalid roll'};
+      }
       const roll = Math.floor(Math.random() * 100) + 1;
 
       const difference = Number(statValue) - roll;
@@ -59,7 +63,6 @@ const reducer = (state = noCharacterState, action) => {
       }
     case CHANGE_CHARACTER_TAB:
       const {tab} = action;
-      console.log({tab});
       return {...state, currentTab: tab}
     default:
       return state;

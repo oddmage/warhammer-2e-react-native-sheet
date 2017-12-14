@@ -12,8 +12,8 @@ export default class CharacterInfo extends Component<{}> {
     const {character, onStatChange, roller} = this.props;
 
     return (
-      <View style={[styles.subContainer, {backgroundColor: 'grey', flexDirection: 'column'}]} >
-        <View style={[styles.subContainer, {backgroundColor: 'yellow'}]}>
+      <View style={[styles.subContainer, {flexDirection: 'column'}]} >
+        <View style={styles.subContainer}>
           {
             primaryStats.map(stat =>
               <Stat
@@ -26,7 +26,7 @@ export default class CharacterInfo extends Component<{}> {
             )
           }
         </View>
-        <View style={[styles.subContainer, {backgroundColor: 'orange'}]}>
+        <View style={styles.subContainer}>
           {
             secondaryStats.map(stat =>
               <Stat
