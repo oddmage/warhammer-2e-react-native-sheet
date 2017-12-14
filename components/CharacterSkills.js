@@ -38,7 +38,7 @@ export default class CharacterSkills extends Component<{}> {
     ));
 
     return (
-      <ScrollView contentContainerStyle={{overflow: 'scroll', flex: 1}}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
         {children}
       </ScrollView>
     );

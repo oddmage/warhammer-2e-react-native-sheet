@@ -48,7 +48,7 @@ class CharacterView extends Component<{}> {
     const {character, currentTab, modalInfo} = this.props;
 
     return (
-      <View style={[styles.container, {flexDirection: 'column', justifyContent: 'space-between', flex: 1, flexWrap: 'nowrap'}]}>
+      <View style={[styles.container, {flexDirection: 'column', justifyContent: 'space-between', flexWrap: 'nowrap'}]}>
         <Modal
           isVisible={!!modalInfo}
           closeModal={this.boundActionCreators.closeModal}
