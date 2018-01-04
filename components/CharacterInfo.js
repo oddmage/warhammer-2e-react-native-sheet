@@ -16,6 +16,7 @@ export default class CharacterInfo extends Component<{}> {
 	    {
 	      characterInfoFields.map(field =>
 	        <TextComponent
+            style={{height: 60}}
 	          text={field.attribute}
 	          key={field.attribute}
 	          value={character[field.attribute] || ''}

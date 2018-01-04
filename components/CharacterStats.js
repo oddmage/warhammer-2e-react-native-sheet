@@ -30,11 +30,12 @@ export default class CharacterInfo extends Component<{}> {
           {
             secondaryStats.map(stat =>
               <Stat
-                text={stat}
-                key={stat}
-                value={character[stat] || ''}
+                text={stat.stat}
+                key={stat.stat}
+                value={ stat.value && stat.value(character) || character[stat] || ''}
                 onChangeFunction={onStatChange}
                 roller={roller}
+                readOnly={!!stat.readOnly}
               />
             )
           }
@@ -56,12 +57,36 @@ const primaryStats = [
 ];
 
 const secondaryStats = [
-  'A',
-  'W',
-  'SB',
-  'TB',
-  'M',
-  'Mag',
-  'IP',
-  'FP'
+  {
+    stat: 'A'
+  },
+  {
+    stat: 'W',
+  },
+  {
+    stat: 'SB',
+    value: (character) => {
+      return Math.floor(Number(character.S || 0)/10) + '';
+    },
+    readOnly: true
+  },
+  {
+    stat: 'TB',
+    value: (character) => {
+      return Math.floor(Number(character.T || 0)/10) + ''
+    },
+    readOnly: true
+  },
+  {
+    stat: 'M'
+  },
+  {
+    stat: 'Mag'
+  },
+  {
+    stat: 'IP'
+  },
+  {
+    stat: 'FP'
+  }
 ];

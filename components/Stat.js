@@ -9,7 +9,7 @@ import styles from '../styles';
 
 export default class Stat extends Component<{}> {
   render() {
-    const {text, value='', onChangeFunction, roller} = this.props;
+    const {text, value='', onChangeFunction, roller, readOnly} = this.props;
 
     return (
       <View style={[styles.container, {height: 60}]}>
@@ -24,6 +24,7 @@ export default class Stat extends Component<{}> {
           placeholder = {text}
           numberOfLines = {1}
           value = {value}
+          editable = {!readOnly}
           onChangeText={(newValue) => !Number.isNaN(Number(newValue)) && onChangeFunction({field: text,value: newValue})}
         />
       </View>

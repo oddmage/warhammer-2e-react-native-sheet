@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     width: '50%',
-    height: 30
+    height: 40
   },
   inputBox: {
     minWidth: '25%',

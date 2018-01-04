@@ -16,11 +16,14 @@ export default class Skill extends Component<{}> {
 
     if(value === '') {
       rollValue = advanced ? 0 : Math.ceil(statValue/2);
+    } else if(value === 'Trained') {
+      rollValue = Number(statValue);
     } else if (value ==='+10') {
       rollValue = Number(statValue) + 10;
     } else if (value==='+20') {
       rollValue = Number(statValue) + 20;
     }
+
 
     const text = `${name} (${stat}, ${value||'Untrained'} = ${rollValue})`;
 

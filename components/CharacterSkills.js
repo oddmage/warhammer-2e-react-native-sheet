@@ -32,10 +32,12 @@ export default class CharacterSkills extends Component<{}> {
         stat={skill.stat}
         value={character[skill.name] || ''}
         onChangeFunction={onSkillChange}
+        statValue={Number(character[skill.stat]) || 0}
         advanced={true}
         roller={roller}
       />
     ));
+
 
     return (
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
