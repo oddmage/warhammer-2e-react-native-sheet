@@ -35,7 +35,7 @@ const reducer = (state = noCharacterState, action) => {
     case ROLLER:
       const {text, statValue} = action.rollInfo;
 
-      if ( statValue === 0 || Number(statValue) == NaN ) {
+      if ( statValue === 0 || Number(statValue) == NaN || Number(statValue) == 0) {
         return {...state, modalInfo: 'Invalid roll'};
       }
       const roll = Math.floor(Math.random() * 100) + 1;

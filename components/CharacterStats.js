@@ -32,9 +32,9 @@ export default class CharacterInfo extends Component<{}> {
               <Stat
                 text={stat.stat}
                 key={stat.stat}
-                value={ stat.value && stat.value(character) || character[stat] || ''}
+                value={ stat.value && stat.value(character) || character[stat.stat] || ''}
                 onChangeFunction={onStatChange}
-                roller={roller}
+                roller={(!stat.readOnly && roller) || emptyFunction}
                 readOnly={!!stat.readOnly}
               />
             )
@@ -44,6 +44,8 @@ export default class CharacterInfo extends Component<{}> {
     );
   }
 }
+
+const emptyFunction = function() {};
 
 const primaryStats = [
   'WS',
