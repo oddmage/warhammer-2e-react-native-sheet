@@ -14,7 +14,7 @@ export default class CharacterInfo extends Component<{}> {
     const visibleTabs = tabs.filter(tab => tab !== currentTab);
 
     return (
-      <View style={[styles.container, {minHeight: 30, maxHeight: 35, minWidth: '100%'}]}>
+      <View style={[styles.subContainer, {minHeight: 30, minWidth: '100%', alignSelf: 'flex-end'}]}>
         {
           visibleTabs.map(tab =>
             <View style={{flex:1, padding: 1}} key={tab}>

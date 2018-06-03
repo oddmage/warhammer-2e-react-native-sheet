@@ -4,14 +4,26 @@ import {
   ScrollView
 } from 'react-native';
 
+import CustomSkill from './CustomSkill';
 import Skill from './Skill';
 import styles from '../styles';
 
 export default class CharacterSkills extends Component<{}> {
   render() {
-    const {character, onSkillChange, roller} = this.props;
-
+    const {character, customSkills={}, onCustomSkillChange, onCustomSkillSwipe, onSkillChange, roller} = this.props;
     const children = [];
+
+    children.push(Object.entries(character.customSkills || {}).map(([index, skill]) => 
+      <CustomSkill
+        key={skill.name}
+        skill={skill}
+        index={index}
+        onChangeFunction={onCustomSkillChange}
+        onCustomSkillSwipe={onCustomSkillSwipe}
+        statValue={Number(character[skill.stat]) || 0}
+        roller={roller}
+      />
+    ));
 
     children.push(basicSkills.map(skill =>
       <Skill
@@ -38,6 +50,7 @@ export default class CharacterSkills extends Component<{}> {
       />
     ));
 
+    children.push(<CustomSkill key={character.customSkillLength} index={'new'} onChangeFunction={onCustomSkillChange} value={''} lengthCheck={character.customSkillLength} />);
 
     return (
       <ScrollView contentContainerStyle={{flexGrow: 1}}>

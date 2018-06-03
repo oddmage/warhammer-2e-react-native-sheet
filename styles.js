@@ -19,9 +19,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
-    flexWrap: 'wrap',
-    flexDirection: 'row'
+    backgroundColor: '#F5FCFF'
   },
   subContainer: {
     backgroundColor: '#F5FCFF',

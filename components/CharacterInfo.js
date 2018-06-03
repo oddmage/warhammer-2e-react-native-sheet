@@ -25,8 +25,8 @@ export default class CharacterInfo extends Component<{}> {
 	        />
 	      )
 	    }
-	  </View>
-      );
+	    </View>
+    );
   }
 }
 

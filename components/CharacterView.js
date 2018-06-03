@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Button,
   Platform,
+  ScrollView,
   Text,
   View
 } from 'react-native';
@@ -14,6 +16,7 @@ import CharacterInfo from './CharacterInfo';
 import CharacterStats from './CharacterStats';
 import CharacterButtons from './CharacterButtons';
 import CharacterSkills from './CharacterSkills';
+import CharacterTalents from './CharacterTalents';
 
 import styles from '../styles'
 import * as Actions from '../actions';
@@ -45,34 +48,56 @@ class CharacterView extends Component<{}> {
   }
 
   render() {
-    const {character, currentTab, modalInfo} = this.props;
+    const {character, currentTab, modalInfo, confirmationInfo} = this.props;
+
+    if (confirmationInfo) {
+      Alert.alert(
+        'Confirm',
+        confirmationInfo.text,
+        [
+          {text: 'Cancel', onPress: () => this.boundActionCreators['closeModal']},
+          {text: 'OK', onPress: () => this.boundActionCreators[confirmationInfo.actionName](confirmationInfo)},
+        ],
+        { cancelable: false }
+      );
+    }
 
     return (
-      <View style={[styles.container, {flexDirection: 'column', justifyContent: 'space-between', flexWrap: 'nowrap'}]}>
+      <View style={[styles.container, {flexDirection: 'column', flexWrap: 'nowrap'}]}>
         <Modal
           isVisible={!!modalInfo}
           closeModal={this.boundActionCreators.closeModal}
           content={modalInfo} />
-        {currentTab === 'Info' &&
-          <CharacterInfo
-            character={character}
-            onAttributeChange={this.boundActionCreators.updateCharacterInfo}
-          />
-        }
-        {currentTab === 'Stats' &&
-          <CharacterStats
-            character={character}
-            onStatChange={this.boundActionCreators.updateCharacterInfo}
-            roller={this.boundActionCreators.roller}
-          />
-        }
-        {currentTab === 'Skills' &&
-          <CharacterSkills
-            character={character}
-            onSkillChange={this.boundActionCreators.updateCharacterInfo}
-            roller={this.boundActionCreators.roller}
-          />
-        }
+        <ScrollView style={[styles.container, {}]}>
+          {currentTab === 'Info' &&
+            <CharacterInfo
+              character={character}
+              onAttributeChange={this.boundActionCreators.updateCharacterInfo}
+            />
+          }
+          {currentTab === 'Stats' &&
+            <CharacterStats
+              character={character}
+              onStatChange={this.boundActionCreators.updateCharacterInfo}
+              roller={this.boundActionCreators.roller}
+            />
+          }
+          {currentTab === 'Skills' &&
+            <CharacterSkills
+              character={character}
+              onSkillChange={this.boundActionCreators.updateCharacterInfo}
+              onCustomSkillSwipe={this.boundActionCreators.deleteCustomSkill}
+              roller={this.boundActionCreators.roller}
+              onCustomSkillChange={this.boundActionCreators.updateCustomSKill}
+            />
+          }
+          {currentTab === 'Talents' &&
+            <CharacterTalents
+              character={character}
+              onTalentChange={this.boundActionCreators.updateCharacterInfo}
+            />
+          }
+        </ScrollView>
         <CharacterButtons currentTab={currentTab} changeTab={this.boundActionCreators.changeCharacterTab} />
       </View>
     );
@@ -82,9 +107,10 @@ class CharacterView extends Component<{}> {
 const mapStateToProps = (state) => {
   const appState = state.app;
   return {
-    character: appState.characters[appState.currentCharacter],
+    character: appState.characters[appState.currentCharacter] || {},
     currentTab: appState.currentTab || 'Info',
-    modalInfo: appState.modalInfo
+    modalInfo: appState.modalInfo,
+    confirmationInfo: appState.confirmationInfo || false
   }
 };
 

@@ -1,9 +1,13 @@
 import {
   CHANGE_CHARACTER_TAB,
   CLOSE_MODAL,
+  CONFIRM_DELETION,
+  DELETE_CUSTOM_SKILL,
+  DISMISS_ALERT,
   ROLLER,
   SET_CURRENT_CHARACTER,
-  UPDATE_CHARACTER_INFO
+  UPDATE_CHARACTER_INFO,
+  UPDATE_CUSTOM_SKILL
 } from '../actions';
 
 const hasCharacterState = {
@@ -18,20 +22,71 @@ const hasCharacterState = {
   currentIndex: 1
 };
 
-const noCharacterState = {
-  characters: {},
-  currentCharacter: undefined,
-  currentIndex: 0
-};
+  const noCharacterState = {
+    characters: {},
+    currentCharacter: undefined,
+    currentIndex: 0
+  };
 
 const reducer = (state = noCharacterState, action) => {
   const {type, info={}, index} = action;
   const {field, value, name} = info;
+  const currentCharacter = state.currentCharacter;
+  var char, newState;
 
   switch (type) {
+    case DISMISS_ALERT:
+      const {confirmationInfo, ...newState} = state;
+      return newState;
+    case CONFIRM_DELETION:
+      const {confirmationInfo: confirmInfo, ...deletedState} = state;
+
+      char = state.characters[currentCharacter];
+      delete char.customSkills[confirmInfo.index];
+      return {
+        ...deletedState,
+        characters: {
+          ...deletedState.characters,
+          [currentCharacter]: {
+            ...char
+          }
+        } 
+      };
     case UPDATE_CHARACTER_INFO:
-      const currentCharacter = state.currentCharacter;
       return {...state, characters: {...state.characters, [currentCharacter]: {...state.characters[currentCharacter], [field]: value}}};
+    case DELETE_CUSTOM_SKILL:
+      const confirmationText = 'Are you sure you want to delete ' + info.skillName + '?';
+      return {...state, confirmationInfo: {text: confirmationText, index: info.index, actionName:'confirmDeletion'}};
+    case UPDATE_CUSTOM_SKILL:
+      char = state.characters[currentCharacter];
+      let customSkillLength = char.customSkills && !isNaN(char.customSkillLength) ? char.customSkillLength : 0;
+      let skillIndex;
+      if( info.index === 'new' ) {
+        skillIndex = customSkillLength;
+        customSkillLength = customSkillLength + 1;
+      } else {
+        skillIndex = info.index
+      }
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            customSkillLength,
+            customSkills: {
+              ...char.customSkills,
+              [skillIndex]: {
+                ...info,
+                index: skillIndex
+              }
+            }
+          }
+        }
+      };
+
+      return newState;
     case ROLLER:
       const {text, statValue} = action.rollInfo;
 
@@ -48,16 +103,18 @@ const reducer = (state = noCharacterState, action) => {
       return {...state, modalInfo: ''};
     case SET_CURRENT_CHARACTER:
       if(index === 'new') {
-        return {
+        newState = {
           ...state,
           currentCharacter: state.currentIndex,
           characters: {
             ...state.characters,
-            [state.currentIndex]: {Name: index}
+            [state.currentIndex]: {}
           },
           currentIndex: state.currentIndex + 1,
           currentTab: 'Info'
         };
+
+        return newState;
       } else {
         return {...state, currentCharacter: index, currentTab: 'Info'};
       }
