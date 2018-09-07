@@ -1,11 +1,13 @@
 import {
   CHANGE_CHARACTER_TAB,
+  CHANGE_TAB_ORDER,
   CLOSE_MODAL,
   CONFIRM_DELETION,
   DELETE_CUSTOM_SKILL,
   DISMISS_ALERT,
   ROLLER,
   SET_CURRENT_CHARACTER,
+  SORT_TABS,
   UPDATE_CHARACTER_INFO,
   UPDATE_CUSTOM_SKILL
 } from '../actions';
@@ -29,7 +31,7 @@ const hasCharacterState = {
   };
 
 const reducer = (state = noCharacterState, action) => {
-  const {type, info={}, index} = action;
+  const {type, info={}, index, tabs} = action;
   const {field, value, name} = info;
   const currentCharacter = state.currentCharacter;
   var char, newState;
@@ -121,6 +123,8 @@ const reducer = (state = noCharacterState, action) => {
     case CHANGE_CHARACTER_TAB:
       const {tab} = action;
       return {...state, currentTab: tab}
+    case SORT_TABS:
+      return {...state, sortTabs: !state.sortTabs}
     default:
       return state;
   }

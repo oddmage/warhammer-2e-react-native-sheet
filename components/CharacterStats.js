@@ -7,9 +7,9 @@ import {
 import Stat from './Stat';
 import styles from '../styles';
 
-export default class CharacterInfo extends Component<{}> {
+export default class CharacterStats extends Component<{}> {
   render() {
-    const {character, onStatChange, roller} = this.props;
+    const {character, updateCharacterInfo, roller} = this.props;
 
     return (
       <View style={[styles.subContainer, {flexDirection: 'column'}]} >
@@ -20,7 +20,7 @@ export default class CharacterInfo extends Component<{}> {
                 text={stat}
                 key={stat}
                 value={character[stat] || ''}
-                onChangeFunction={onStatChange}
+                onChangeFunction={updateCharacterInfo}
                 roller={roller}
               />
             )
@@ -33,7 +33,7 @@ export default class CharacterInfo extends Component<{}> {
                 text={stat.stat}
                 key={stat.stat}
                 value={ stat.value && stat.value(character) || character[stat.stat] || ''}
-                onChangeFunction={onStatChange}
+                onChangeFunction={updateCharacterInfo}
                 roller={(!stat.readOnly && roller) || emptyFunction}
                 readOnly={!!stat.readOnly}
               />

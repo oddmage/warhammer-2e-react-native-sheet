@@ -9,7 +9,7 @@ import styles from '../styles';
 
 export default class CharacterInfo extends Component<{}> {
   render() {
-    const {character, onAttributeChange} = this.props;
+    const {character, updateCharacterInfo} = this.props;
 
     return (
       <View style={styles.subContainer}>
@@ -21,7 +21,7 @@ export default class CharacterInfo extends Component<{}> {
 	          key={field.attribute}
 	          value={character[field.attribute] || ''}
 	          overrides={field.overrides || {}}
-	          onChangeFunction={onAttributeChange}
+	          onChangeFunction={updateCharacterInfo}
 	        />
 	      )
 	    }

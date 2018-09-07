@@ -9,7 +9,7 @@ import styles from '../styles';
 
 export default class CharacterTalents extends Component<{}> {
   render() {
-    const {character, onTalentChange} = this.props;
+    const {character, updateCharacterInfo} = this.props;
 
     return (
       <View style={styles.subContainer}>
@@ -18,7 +18,7 @@ export default class CharacterTalents extends Component<{}> {
           value={character['talents'] || ''}
           multiline= {true}
           autoGrow= {false}
-          onChangeText={(newValue) => onTalentChange({field: 'talents',value: newValue})}
+          onChangeText={(newValue) => updateCharacterInfo({field: 'talents',value: newValue})}
         />
 	    </View>
       );

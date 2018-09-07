@@ -1,4 +1,5 @@
 export const CHANGE_CHARACTER_TAB = 'CHANGE_CHARACTER_TAB';
+export const CHANGE_TAB_ORDER = 'CHANGE_TAB_ORDER';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 export const SET_CURRENT_CHARACTER = 'SET_CURRENT_CHARACTER';
 export const ROLLER = 'ROLLER';
@@ -7,6 +8,7 @@ export const UPDATE_CUSTOM_SKILL = 'UPDATE_CUSTOM_SKILL';
 export const DELETE_CUSTOM_SKILL = 'DELETE_CUSTOM_SKILL';
 export const CONFIRM_DELETION = 'CONFIRM_DELETION';
 export const DISMISS_ALERT = 'DISMISS_ALERT';
+export const SORT_TABS = 'SORT_TABS';
 
 export const setCurrentCharacter = (index) => ({
   type: SET_CURRENT_CHARACTER,
@@ -18,7 +20,7 @@ export const updateCharacterInfo = (info) => ({
   info
 });
 
-export const updateCustomSKill = (info) => ({
+export const updateCustomSkill = (info) => ({
   type: UPDATE_CUSTOM_SKILL,
   info
 });
@@ -27,6 +29,11 @@ export const changeCharacterTab = (tab) => ({
   type: CHANGE_CHARACTER_TAB,
   tab
 });
+
+export const changeTabOrder = (tabs) => ({
+  type: UPDATE_CHARACTER_INFO,
+  info: {tabs}
+})
 
 export const roller = (rollInfo) => ({
   type: ROLLER,
@@ -50,4 +57,8 @@ export const confirmDeletion = (info) => ({
 export const dismissAlert = (info) => ({
   type: DISMISS_ALERT,
   info
+});
+
+export const sortTabs = () => ({
+  type: SORT_TABS
 });

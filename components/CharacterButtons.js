@@ -7,9 +7,9 @@ import {
 
 import styles from '../styles';
 
-export default class CharacterInfo extends Component<{}> {
+export default class CharacterButtons extends Component<{}> {
   render() {
-    const {changeTab, currentTab} = this.props;
+    const {changeTab, currentTab, sortTabs} = this.props;
 
     const visibleTabs = tabs.filter(tab => tab !== currentTab);
 
@@ -24,6 +24,11 @@ export default class CharacterInfo extends Component<{}> {
             </View>
           )
         }
+        <View>
+          <Button
+            title={"..."}
+            onPress={() => {sortTabs()}} />
+        </View>
       </View>
     );
   }
