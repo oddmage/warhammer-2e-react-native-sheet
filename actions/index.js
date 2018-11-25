@@ -9,6 +9,8 @@ export const DELETE_CUSTOM_SKILL = 'DELETE_CUSTOM_SKILL';
 export const CONFIRM_DELETION = 'CONFIRM_DELETION';
 export const DISMISS_ALERT = 'DISMISS_ALERT';
 export const SORT_TABS = 'SORT_TABS';
+export const UPDATE_EQUIPMENT = 'UPDATE_EQUIPMENT';
+export const UPDATE_SPELL = 'UPDATE_SPELL';
 
 export const setCurrentCharacter = (index) => ({
   type: SET_CURRENT_CHARACTER,
@@ -25,15 +27,27 @@ export const updateCustomSkill = (info) => ({
   info
 });
 
+export const updateEquipment = (info) => ({
+  type: UPDATE_EQUIPMENT,
+  info
+});
+
+export const updateSpell = (info) => ({
+  type: UPDATE_SPELL,
+  info
+});
+
 export const changeCharacterTab = (tab) => ({
   type: CHANGE_CHARACTER_TAB,
   tab
 });
 
-export const changeTabOrder = (tabs) => ({
+export const changeTabOrder = (tabs) => {
+ return ({
   type: UPDATE_CHARACTER_INFO,
-  info: {tabs}
+  info: {field: 'tabs', value: tabs}
 })
+}
 
 export const roller = (rollInfo) => ({
   type: ROLLER,

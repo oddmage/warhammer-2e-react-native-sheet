@@ -14,11 +14,13 @@ import SortableList from 'react-native-sortable-list';
 
 import Modal from './Modal'
 
+import CharacterEquipment from './CharacterEquipment';
 import CharacterInfo from './CharacterInfo';
 import CharacterStats from './CharacterStats';
 import CharacterButtons from './CharacterButtons';
 import CharacterSkills from './CharacterSkills';
 import CharacterTalents from './CharacterTalents';
+import CharacterMagic from './CharacterMagic';
 import TextComponent from './TextComponent';
 
 import styles from '../styles'
@@ -64,8 +66,21 @@ class CharacterView extends Component<{}> {
         { cancelable: false }
       );
     }
-    console.log(character.tabs);
-    const FirstTab = character.tabs ? tabLookupMap[character.tabs[0]] : CharacterInfo;
+    const FirstTab = (tabLookupMap[currentTab]) || CharacterInfo;
+
+    const currentTabOrder = character.tabs || defaultTabOrder;
+
+    const changeFunction = (newOrder) => {
+      const newTabs = [];
+
+      newOrder.forEach(value=>newTabs.push(currentTabOrder[value]));
+
+      this.currentOrder = newTabs;
+    }
+
+    const releaseFunction = () =>{
+      this.boundActionCreators.changeTabOrder(this.currentOrder);
+    }
 
     return (
       <View style={[styles.container, {flexDirection: 'column', flexWrap: 'nowrap'}]}>
@@ -76,7 +91,8 @@ class CharacterView extends Component<{}> {
         <ScrollView style={[styles.container, {}]}>
           { sortTabs ? 
               (<SortableList
-              // onChangeOrder={this.boundActionCreators.changeTabOrder}
+              onChangeOrder={changeFunction}
+              onReleaseRow={releaseFunction}
               style={styles.subContainer}
               contentContainerStyle={styles.contentContainer}
               data={character.tabs || defaultTabOrder}
@@ -87,7 +103,7 @@ class CharacterView extends Component<{}> {
               />
           }
         </ScrollView>
-        <CharacterButtons currentTab={currentTab} changeTab={this.boundActionCreators.changeCharacterTab} sortTabs={this.boundActionCreators.sortTabs}/>
+        <CharacterButtons currentTab={currentTab} tabs={currentTabOrder} changeTab={this.boundActionCreators.changeCharacterTab} sortTabs={this.boundActionCreators.sortTabs}/>
       </View>
     );
   }
@@ -97,7 +113,7 @@ class CharacterView extends Component<{}> {
   }
 
 }
-
+console.disableYellowBox = true;
 class Row extends Component {
 
   constructor(props) {
@@ -173,9 +189,9 @@ const tabLookupMap = {
   'Info': CharacterInfo,
   'Stats': CharacterStats,
   'Skills': CharacterSkills,
-  'Talents': CharacterSkills,
-  'Equip': '',
-  'Magic': ''
+  'Talents': CharacterTalents,
+  'Equip': CharacterEquipment,
+  'Magic': CharacterMagic
 }
 
 export default connect(mapStateToProps)(CharacterView)
