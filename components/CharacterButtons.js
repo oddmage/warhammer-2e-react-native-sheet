@@ -7,11 +7,11 @@ import {
 
 import styles from '../styles';
 
-export default class CharacterInfo extends Component<{}> {
+export default class CharacterButtons extends Component<{}> {
   render() {
-    const {changeTab, currentTab} = this.props;
+    const {changeTab, currentTab, sortTabs, tabs} = this.props;
 
-    const visibleTabs = tabs.filter(tab => tab !== currentTab);
+    const visibleTabs = tabs.filter((tab, index) => tab !== currentTab && index < 5);
 
     return (
       <View style={[styles.subContainer, {minHeight: 30, minWidth: '100%', alignSelf: 'flex-end'}]}>
@@ -24,14 +24,12 @@ export default class CharacterInfo extends Component<{}> {
             </View>
           )
         }
+        <View>
+          <Button
+            title={"..."}
+            onPress={() => {sortTabs()}} />
+        </View>
       </View>
     );
   }
 }
-
-const tabs = [
-  'Info',
-  'Stats',
-  'Skills',
-  'Talents'
-];

@@ -39,14 +39,6 @@ export default class CustomSkill extends Component<{}> {
     }
 
     const text = `${this.state.inputValue} (${stat}, ${value||'Untrained'} = ${rollValue})`;
-
-    // console.log('rendering')
-
-    // const outputMe = (event) => {
-    //   console.log({test: event.nativeEvent.text});
-    //   onChangeFunction({name:  event.nativeEvent.text, stat, value, index})
-    //   this.setState({inputValue: ''});
-    // };
     const config = {
       velocityThreshold: 0.3,
       directionalOffsetThreshold: 80

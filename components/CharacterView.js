@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   Alert,
-  Button,
+  Animated,
+  Easing,
   Platform,
   ScrollView,
   Text,
@@ -9,14 +10,18 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
+import SortableList from 'react-native-sortable-list';
 
 import Modal from './Modal'
 
+import CharacterEquipment from './CharacterEquipment';
 import CharacterInfo from './CharacterInfo';
 import CharacterStats from './CharacterStats';
 import CharacterButtons from './CharacterButtons';
 import CharacterSkills from './CharacterSkills';
 import CharacterTalents from './CharacterTalents';
+import CharacterMagic from './CharacterMagic';
+import TextComponent from './TextComponent';
 
 import styles from '../styles'
 import * as Actions from '../actions';
@@ -48,7 +53,7 @@ class CharacterView extends Component<{}> {
   }
 
   render() {
-    const {character, currentTab, modalInfo, confirmationInfo} = this.props;
+    const {character, currentTab, modalInfo, confirmationInfo, sortTabs} = this.props;
 
     if (confirmationInfo) {
       Alert.alert(
@@ -61,6 +66,21 @@ class CharacterView extends Component<{}> {
         { cancelable: false }
       );
     }
+    const FirstTab = (tabLookupMap[currentTab]) || CharacterInfo;
+
+    const currentTabOrder = character.tabs || defaultTabOrder;
+
+    const changeFunction = (newOrder) => {
+      const newTabs = [];
+
+      newOrder.forEach(value=>newTabs.push(currentTabOrder[value]));
+
+      this.currentOrder = newTabs;
+    }
+
+    const releaseFunction = () =>{
+      this.boundActionCreators.changeTabOrder(this.currentOrder);
+    }
 
     return (
       <View style={[styles.container, {flexDirection: 'column', flexWrap: 'nowrap'}]}>
@@ -69,40 +89,90 @@ class CharacterView extends Component<{}> {
           closeModal={this.boundActionCreators.closeModal}
           content={modalInfo} />
         <ScrollView style={[styles.container, {}]}>
-          {currentTab === 'Info' &&
-            <CharacterInfo
-              character={character}
-              onAttributeChange={this.boundActionCreators.updateCharacterInfo}
-            />
-          }
-          {currentTab === 'Stats' &&
-            <CharacterStats
-              character={character}
-              onStatChange={this.boundActionCreators.updateCharacterInfo}
-              roller={this.boundActionCreators.roller}
-            />
-          }
-          {currentTab === 'Skills' &&
-            <CharacterSkills
-              character={character}
-              onSkillChange={this.boundActionCreators.updateCharacterInfo}
-              onCustomSkillSwipe={this.boundActionCreators.deleteCustomSkill}
-              roller={this.boundActionCreators.roller}
-              onCustomSkillChange={this.boundActionCreators.updateCustomSKill}
-            />
-          }
-          {currentTab === 'Talents' &&
-            <CharacterTalents
-              character={character}
-              onTalentChange={this.boundActionCreators.updateCharacterInfo}
-            />
+          { sortTabs ? 
+              (<SortableList
+              onChangeOrder={changeFunction}
+              onReleaseRow={releaseFunction}
+              style={styles.subContainer}
+              contentContainerStyle={styles.contentContainer}
+              data={character.tabs || defaultTabOrder}
+              renderRow={this._renderRow} />)
+            : <FirstTab
+                character={character}
+                {...this.boundActionCreators}
+              />
           }
         </ScrollView>
-        <CharacterButtons currentTab={currentTab} changeTab={this.boundActionCreators.changeCharacterTab} />
+        <CharacterButtons currentTab={currentTab} tabs={currentTabOrder} changeTab={this.boundActionCreators.changeCharacterTab} sortTabs={this.boundActionCreators.sortTabs}/>
       </View>
     );
   }
+
+  _renderRow = ({data, active}) => {
+    return <Row data={data} active={active} />
+  }
+
 }
+console.disableYellowBox = true;
+class Row extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this._active = new Animated.Value(0);
+
+    this._style = {
+      ...Platform.select({
+        ios: {
+          transform: [{
+            scale: this._active.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 1.1],
+            }),
+          }],
+          shadowRadius: this._active.interpolate({
+            inputRange: [0, 1],
+            outputRange: [2, 10],
+          }),
+        },
+
+        android: {
+          transform: [{
+            scale: this._active.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 1.07],
+            }),
+          }],
+          elevation: this._active.interpolate({
+            inputRange: [0, 1],
+            outputRange: [2, 6],
+          }),
+        },
+      })
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.active !== nextProps.active) {
+      Animated.timing(this._active, {
+        duration: 300,
+        easing: Easing.bounce,
+        toValue: Number(nextProps.active),
+      }).start();
+    }
+  }
+
+  render() {
+   const {data, active} = this.props;
+
+    return (
+      <Animated.View style={styles.subContainer}>
+        <Text style={styles.tabOrderLabel} >{data}</Text>
+      </Animated.View>
+    );
+  }
+}
+
 
 const mapStateToProps = (state) => {
   const appState = state.app;
@@ -110,8 +180,18 @@ const mapStateToProps = (state) => {
     character: appState.characters[appState.currentCharacter] || {},
     currentTab: appState.currentTab || 'Info',
     modalInfo: appState.modalInfo,
-    confirmationInfo: appState.confirmationInfo || false
+    confirmationInfo: appState.confirmationInfo || false,
+    sortTabs: appState.sortTabs
   }
 };
+const defaultTabOrder = ['Info', 'Stats', 'Skills', 'Talents', 'Equip', 'Magic'];
+const tabLookupMap = {
+  'Info': CharacterInfo,
+  'Stats': CharacterStats,
+  'Skills': CharacterSkills,
+  'Talents': CharacterTalents,
+  'Equip': CharacterEquipment,
+  'Magic': CharacterMagic
+}
 
 export default connect(mapStateToProps)(CharacterView)

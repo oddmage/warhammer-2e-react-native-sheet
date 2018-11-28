@@ -1,13 +1,17 @@
 import {
   CHANGE_CHARACTER_TAB,
+  CHANGE_TAB_ORDER,
   CLOSE_MODAL,
   CONFIRM_DELETION,
   DELETE_CUSTOM_SKILL,
   DISMISS_ALERT,
   ROLLER,
   SET_CURRENT_CHARACTER,
+  SORT_TABS,
   UPDATE_CHARACTER_INFO,
-  UPDATE_CUSTOM_SKILL
+  UPDATE_CUSTOM_SKILL,
+  UPDATE_EQUIPMENT,
+  UPDATE_SPELL
 } from '../actions';
 
 const hasCharacterState = {
@@ -29,8 +33,8 @@ const hasCharacterState = {
   };
 
 const reducer = (state = noCharacterState, action) => {
-  const {type, info={}, index} = action;
-  const {field, value, name} = info;
+  const {type, info={}, index, tabs} = action;
+  const {field, value} = info;
   const currentCharacter = state.currentCharacter;
   var char, newState;
 
@@ -57,6 +61,44 @@ const reducer = (state = noCharacterState, action) => {
     case DELETE_CUSTOM_SKILL:
       const confirmationText = 'Are you sure you want to delete ' + info.skillName + '?';
       return {...state, confirmationInfo: {text: confirmationText, index: info.index, actionName:'confirmDeletion'}};
+    case UPDATE_EQUIPMENT:
+      char = state.characters[currentCharacter];
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            equipment: [
+              ...char.equipment || [],
+            ]
+          }
+        }
+      };
+
+      newState.characters[currentCharacter].equipment[info.index] = {...info};
+
+      return newState;
+    case UPDATE_SPELL:
+      char = state.characters[currentCharacter];
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            spells: [
+              ...char.spells || [],
+            ]
+          }
+        }
+      };
+
+      newState.characters[currentCharacter].spells[info.index] = {...info};
+
+      return newState;
     case UPDATE_CUSTOM_SKILL:
       char = state.characters[currentCharacter];
       let customSkillLength = char.customSkills && !isNaN(char.customSkillLength) ? char.customSkillLength : 0;
@@ -120,7 +162,9 @@ const reducer = (state = noCharacterState, action) => {
       }
     case CHANGE_CHARACTER_TAB:
       const {tab} = action;
-      return {...state, currentTab: tab}
+      return {...state, currentTab: tab, sortTabs: false}
+    case SORT_TABS:
+      return {...state, sortTabs: true}
     default:
       return state;
   }
