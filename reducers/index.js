@@ -36,11 +36,11 @@ const reducer = (state = noCharacterState, action) => {
   const {type, info={}, index, tabs} = action;
   const {field, value} = info;
   const currentCharacter = state.currentCharacter;
-  var char, newState;
+  let char, newState;
 
   switch (type) {
     case DISMISS_ALERT:
-      const {confirmationInfo, ...newState} = state;
+      let {confirmationInfo, ...newState} = state;
       return newState;
     case CONFIRM_DELETION:
       const {confirmationInfo: confirmInfo, ...deletedState} = state;
