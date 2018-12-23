@@ -26,6 +26,14 @@ import TextComponent from './TextComponent';
 import styles from '../styles'
 import * as Actions from '../actions';
 
+getMainTab = (currentTab, character, boundActionCreators) => {
+  const Tab = tabLookupMap[currentTab];
+  if(currentTab === 'Equip') {
+    return <Tab equipment={character.equipment} {...boundActionCreators} />;
+  }
+  return <Tab character={character} {...boundActionCreators} />;
+}
+
 class CharacterView extends Component<{}> {
     constructor(props) {
     super(props);
@@ -60,13 +68,13 @@ class CharacterView extends Component<{}> {
         'Confirm',
         confirmationInfo.text,
         [
-          {text: 'Cancel', onPress: () => this.boundActionCreators['closeModal']},
+          {text: 'Cancel', onPress: () => this.boundActionCreators.dismissAlert()},
           {text: 'OK', onPress: () => this.boundActionCreators[confirmationInfo.actionName](confirmationInfo)},
         ],
         { cancelable: false }
       );
     }
-    const FirstTab = (tabLookupMap[currentTab]) || CharacterInfo;
+    const firstTab = !sortTabs && getMainTab(currentTab, character, this.boundActionCreators);
 
     const currentTabOrder = character.tabs || defaultTabOrder;
 
@@ -97,10 +105,8 @@ class CharacterView extends Component<{}> {
               contentContainerStyle={styles.contentContainer}
               data={character.tabs || defaultTabOrder}
               renderRow={this._renderRow} />)
-            : <FirstTab
-                character={character}
-                {...this.boundActionCreators}
-              />
+            : 
+              firstTab
           }
         </ScrollView>
         <CharacterButtons currentTab={currentTab} tabs={currentTabOrder} changeTab={this.boundActionCreators.changeCharacterTab} sortTabs={this.boundActionCreators.sortTabs}/>

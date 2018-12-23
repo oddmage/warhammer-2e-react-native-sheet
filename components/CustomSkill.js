@@ -3,7 +3,7 @@ import {
   TextInput,
   View
 } from 'react-native';
-import {Select, ListRow} from 'teaset';
+import {Select} from 'teaset';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import styles from '../styles';
@@ -14,11 +14,6 @@ export default class CustomSkill extends Component<{}> {
     this.state = {
       inputValue : props.skill ? props.skill.name : '',
     };
-  }
-
-  onSwipeLeft() {
-    // this.setState({myText: 'You swiped left!'});
-    this.state.inputValue
   }
 
   render() {

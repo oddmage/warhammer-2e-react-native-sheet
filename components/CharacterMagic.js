@@ -7,7 +7,7 @@ import Spell from './Spell';
 
 export default class CharacterMagic extends Component<{}> {
   render() {
-    const {character, updateSpell} = this.props;
+    const {character, confirmDeleteSpell, updateSpell} = this.props;
     const spells = character.spells || [];
 
     const entries = [];
@@ -16,6 +16,8 @@ export default class CharacterMagic extends Component<{}> {
       entries.push(
         <Spell
           spell={spell}
+          confirmDeleteSpell={confirmDeleteSpell}
+          key={`spell_${index}_${spell.Name}`}
           index={index}
           updateSpell={updateSpell}
       />)

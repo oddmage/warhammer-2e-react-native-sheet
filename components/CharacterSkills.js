@@ -15,7 +15,7 @@ export default class CharacterSkills extends Component<{}> {
 
     children.push(Object.entries(character.customSkills || {}).map(([index, skill]) => 
       <CustomSkill
-        key={skill.name}
+        key={`cs_${skill.name}_${index}`}
         skill={skill}
         index={index}
         onChangeFunction={updateCustomSkill}

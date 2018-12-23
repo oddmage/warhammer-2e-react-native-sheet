@@ -18,6 +18,7 @@ export default class CharacterTalents extends Component<{}> {
           value={character['talents'] || ''}
           multiline= {true}
           autoGrow= {false}
+          placeholder={'Enter talents here'}
           onChangeText={(newValue) => updateCharacterInfo({field: 'talents',value: newValue})}
         />
 	    </View>

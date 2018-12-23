@@ -1,3 +1,6 @@
+export const ADD_EQUIPMENT = 'ADD_EQUIPMENT';
+export const CONFIRM_DELETE_EQUIPMENT = 'CONFIRM_DELETE_EQUIPMENT';
+export const DELETE_EQUIPMENT = 'DELETE_EQUIPMENT';
 export const CHANGE_CHARACTER_TAB = 'CHANGE_CHARACTER_TAB';
 export const CHANGE_TAB_ORDER = 'CHANGE_TAB_ORDER';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
@@ -10,6 +13,8 @@ export const CONFIRM_DELETION = 'CONFIRM_DELETION';
 export const DISMISS_ALERT = 'DISMISS_ALERT';
 export const SORT_TABS = 'SORT_TABS';
 export const UPDATE_EQUIPMENT = 'UPDATE_EQUIPMENT';
+export const CONFIRM_DELETE_SPELL = 'CONFIRM_DELETE_SPELL';
+export const DELETE_SPELL = 'DELETE_SPELL';
 export const UPDATE_SPELL = 'UPDATE_SPELL';
 
 export const setCurrentCharacter = (index) => ({
@@ -27,9 +32,34 @@ export const updateCustomSkill = (info) => ({
   info
 });
 
+export const addEquipment = (eqType) => ({
+  type: ADD_EQUIPMENT,
+  eqType
+});
+
+export const confirmDeleteEquipment = (index) => ({
+  type: CONFIRM_DELETE_EQUIPMENT,
+  index
+});
+
+export const deleteEquipment = (index) => ({
+  type: DELETE_EQUIPMENT,
+  index
+});
+
 export const updateEquipment = (info) => ({
   type: UPDATE_EQUIPMENT,
   info
+});
+
+export const confirmDeleteSpell = (index) => ({
+  type: CONFIRM_DELETE_SPELL,
+  index
+});
+
+export const deleteSpell = (index) => ({
+  type: DELETE_SPELL,
+  index
 });
 
 export const updateSpell = (info) => ({
@@ -68,9 +98,8 @@ export const confirmDeletion = (info) => ({
   info
 });
 
-export const dismissAlert = (info) => ({
-  type: DISMISS_ALERT,
-  info
+export const dismissAlert = () => ({
+  type: DISMISS_ALERT
 });
 
 export const sortTabs = () => ({
