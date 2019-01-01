@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
   inputBoxWide: {
+    fontSize: 14,
     width: '100%',
     flexGrow: 1
   },
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     })
   },
   statLabel: {
+    fontSize: 16,
     textAlign: 'center',
     textAlignVertical : 'center',
     color: 'white',

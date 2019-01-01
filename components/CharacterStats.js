@@ -34,7 +34,7 @@ export default class CharacterStats extends Component<{}> {
                 key={stat.stat}
                 value={ stat.value && stat.value(character) || character[stat.stat] || ''}
                 onChangeFunction={updateCharacterInfo}
-                roller={(!stat.readOnly && roller) || emptyFunction}
+                roller={emptyFunction}
                 readOnly={!!stat.readOnly}
               />
             )

@@ -17,7 +17,7 @@ export default class Spell extends Component<{}> {
   }
 
   render() {
-    const {spell = {}, index, confirmDeleteSpell, updateSpell} = this.props;
+    const {spell = {}, index, confirmDeleteSpell = ()=>{}, updateSpell} = this.props;
 
     const fields = []
     spellFields.forEach(field =>
