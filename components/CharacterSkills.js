@@ -10,16 +10,16 @@ import styles from '../styles';
 
 export default class CharacterSkills extends Component<{}> {
   render() {
-    const {character, customSkills={}, onCustomSkillChange, onCustomSkillSwipe, onSkillChange, roller} = this.props;
+    const {character, customSkills={}, updateCustomSkill, deleteCustomSkill, updateCharacterInfo, roller} = this.props;
     const children = [];
 
     children.push(Object.entries(character.customSkills || {}).map(([index, skill]) => 
       <CustomSkill
-        key={skill.name}
+        key={`cs_${skill.name}_${index}`}
         skill={skill}
         index={index}
-        onChangeFunction={onCustomSkillChange}
-        onCustomSkillSwipe={onCustomSkillSwipe}
+        onChangeFunction={updateCustomSkill}
+        onCustomSkillSwipe={deleteCustomSkill}
         statValue={Number(character[skill.stat]) || 0}
         roller={roller}
       />
@@ -31,7 +31,7 @@ export default class CharacterSkills extends Component<{}> {
         name={skill.name}
         stat={skill.stat}
         value={character[skill.name] || ''}
-        onChangeFunction={onSkillChange}
+        onChangeFunction={updateCharacterInfo}
         statValue={Number(character[skill.stat]) || 0}
         roller={roller}
       />
@@ -43,14 +43,14 @@ export default class CharacterSkills extends Component<{}> {
         name={skill.name}
         stat={skill.stat}
         value={character[skill.name] || ''}
-        onChangeFunction={onSkillChange}
+        onChangeFunction={updateCharacterInfo}
         statValue={Number(character[skill.stat]) || 0}
         advanced={true}
         roller={roller}
       />
     ));
 
-    children.push(<CustomSkill key={character.customSkillLength} index={'new'} onChangeFunction={onCustomSkillChange} value={''} lengthCheck={character.customSkillLength} />);
+    children.push(<CustomSkill key={character.customSkillLength} index={'new'} onChangeFunction={updateCustomSkill} value={''} lengthCheck={character.customSkillLength} />);
 
     return (
       <ScrollView contentContainerStyle={{flexGrow: 1}}>

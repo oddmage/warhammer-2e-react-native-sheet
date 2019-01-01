@@ -9,7 +9,7 @@ import styles from '../styles'
 
 export default class TextComponent extends Component<{}> {
   render() {
-    const {text, overrides = {}, value = '', onChangeFunction} = this.props;
+    const {text, overrides = {}, value = '', onChangeFunction, placeholder} = this.props;
 
     return (
       <View style={[styles.textInputView, overrides.textInputView]}>
@@ -17,7 +17,7 @@ export default class TextComponent extends Component<{}> {
         <TextInput style={[styles.inputBox, overrides.inputBox]}
           editable = {true}
           maxLength = {40}
-          placeholder = {text}
+          placeholder = {text || placeholder}
           numberOfLines = {1}
           value = {value}
           onChangeText={(newValue) => onChangeFunction({field: text,value: newValue})}

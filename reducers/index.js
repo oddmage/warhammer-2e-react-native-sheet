@@ -1,4 +1,7 @@
 import {
+  ADD_EQUIPMENT,
+  CONFIRM_DELETE_EQUIPMENT,
+  DELETE_EQUIPMENT,
   CHANGE_CHARACTER_TAB,
   CLOSE_MODAL,
   CONFIRM_DELETION,
@@ -6,8 +9,13 @@ import {
   DISMISS_ALERT,
   ROLLER,
   SET_CURRENT_CHARACTER,
+  SORT_TABS,
   UPDATE_CHARACTER_INFO,
-  UPDATE_CUSTOM_SKILL
+  UPDATE_CUSTOM_SKILL,
+  UPDATE_EQUIPMENT,
+  CONFIRM_DELETE_SPELL,
+  DELETE_SPELL,
+  UPDATE_SPELL
 } from '../actions';
 
 const hasCharacterState = {
@@ -29,17 +37,17 @@ const hasCharacterState = {
   };
 
 const reducer = (state = noCharacterState, action) => {
-  const {type, info={}, index} = action;
-  const {field, value, name} = info;
+  const {type, info={}, index, tabs} = action;
+  const {field, value} = info;
   const currentCharacter = state.currentCharacter;
-  var char, newState;
+  var char, newState,confirmationText;
 
   switch (type) {
     case DISMISS_ALERT:
-      const {confirmationInfo, ...newState} = state;
+      let {confirmationInfo, ...newState} = state;
       return newState;
     case CONFIRM_DELETION:
-      const {confirmationInfo: confirmInfo, ...deletedState} = state;
+      var {confirmationInfo: confirmInfo, ...deletedState} = state;
 
       char = state.characters[currentCharacter];
       delete char.customSkills[confirmInfo.index];
@@ -54,9 +62,92 @@ const reducer = (state = noCharacterState, action) => {
       };
     case UPDATE_CHARACTER_INFO:
       return {...state, characters: {...state.characters, [currentCharacter]: {...state.characters[currentCharacter], [field]: value}}};
+    case CONFIRM_DELETE_EQUIPMENT:
+      confirmationText = 'Are you sure you want to delete ' + state.characters[currentCharacter].equipment[index].Name + '?';
+      return {...state, confirmationInfo: {text: confirmationText, index: index, actionName:'deleteEquipment'}};
     case DELETE_CUSTOM_SKILL:
-      const confirmationText = 'Are you sure you want to delete ' + info.skillName + '?';
+      confirmationText = 'Are you sure you want to delete ' + info.skillName + '?';
       return {...state, confirmationInfo: {text: confirmationText, index: info.index, actionName:'confirmDeletion'}};
+    case ADD_EQUIPMENT:
+      char = state.characters[currentCharacter];
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            equipment: [
+              ...char.equipment || [],
+            ]
+          }
+        }
+      };
+
+      newState.characters[currentCharacter].equipment.push(equipmentTypes[action.eqType]);
+
+      return newState;
+    case DELETE_EQUIPMENT:
+      char = state.characters[currentCharacter];
+
+      var {confirmationInfo: confirmInfo, ...newState} = state;
+
+      char.equipment.splice(confirmInfo.index, 1);
+
+      newState.characters[currentCharacter].equipment = char.equipment;
+
+      return newState;
+    case UPDATE_EQUIPMENT:
+      char = state.characters[currentCharacter];
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            equipment: [
+              ...char.equipment,
+            ]
+          }
+        }
+      };
+
+      newState.characters[currentCharacter].equipment[info.index] = {...info};
+
+      return newState;
+    case UPDATE_SPELL:
+      char = state.characters[currentCharacter];
+
+      newState = {
+        ...state, 
+        characters: {
+          ...state.characters, 
+          [currentCharacter]: {
+            ...char,
+            spells: [
+              ...char.spells || [],
+            ]
+          }
+        }
+      };
+
+      newState.characters[currentCharacter].spells[info.index] = {...info};
+
+      return newState;
+    case DELETE_SPELL:
+      char = state.characters[currentCharacter];
+
+      var {confirmationInfo: confirmInfo, ...newState} = state;
+
+      char.spells.splice(confirmInfo.index, 1);
+
+      newState.characters[currentCharacter].equipment = char.equipment;
+
+      return newState;
+    case CONFIRM_DELETE_SPELL:
+      confirmationText = 'Are you sure you want to delete ' + state.characters[currentCharacter].spells[index].Name + '?';
+      return {...state, confirmationInfo: {text: confirmationText, index: index, actionName:'deleteSpell'}};
     case UPDATE_CUSTOM_SKILL:
       char = state.characters[currentCharacter];
       let customSkillLength = char.customSkills && !isNaN(char.customSkillLength) ? char.customSkillLength : 0;
@@ -120,9 +211,37 @@ const reducer = (state = noCharacterState, action) => {
       }
     case CHANGE_CHARACTER_TAB:
       const {tab} = action;
-      return {...state, currentTab: tab}
+      return {...state, currentTab: tab, sortTabs: false}
+    case SORT_TABS:
+      return {...state, sortTabs: true}
     default:
       return state;
+  }
+};
+
+const equipmentTypes = {
+  Armor: {
+    Name: '',
+    Cost: '',
+    Enc: '',
+    AP: '',
+    Qualities:''
+  },
+  Item: {
+    Name: '',
+    Cost: '',
+    Enc: '',
+    Qualities:''
+  },
+  Weapon: {
+    Name: '',
+    Cost: '',
+    Enc: '',
+    Damage: '',
+    Group: '',
+    Range: '',
+    Reload: '',
+    Qualities:''
   }
 };
 

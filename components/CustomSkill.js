@@ -3,7 +3,7 @@ import {
   TextInput,
   View
 } from 'react-native';
-import {Select, ListRow} from 'teaset';
+import {Select} from 'teaset';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import styles from '../styles';
@@ -14,11 +14,6 @@ export default class CustomSkill extends Component<{}> {
     this.state = {
       inputValue : props.skill ? props.skill.name : '',
     };
-  }
-
-  onSwipeLeft() {
-    // this.setState({myText: 'You swiped left!'});
-    this.state.inputValue
   }
 
   render() {
@@ -39,14 +34,6 @@ export default class CustomSkill extends Component<{}> {
     }
 
     const text = `${this.state.inputValue} (${stat}, ${value||'Untrained'} = ${rollValue})`;
-
-    // console.log('rendering')
-
-    // const outputMe = (event) => {
-    //   console.log({test: event.nativeEvent.text});
-    //   onChangeFunction({name:  event.nativeEvent.text, stat, value, index})
-    //   this.setState({inputValue: ''});
-    // };
     const config = {
       velocityThreshold: 0.3,
       directionalOffsetThreshold: 80

@@ -1,4 +1,5 @@
 import {
+  Platform,
   StyleSheet
 } from 'react-native';
 
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
   inputBoxWide: {
+    fontSize: 14,
     width: '100%',
     flexGrow: 1
   },
@@ -31,7 +33,28 @@ const styles = StyleSheet.create({
     textAlignVertical : 'center',
     color: '#333333'
   },
+  tabOrderLabel: {
+    textAlign: 'center',
+    textAlignVertical : 'center',
+    color: '#333333',
+    padding: 5,
+    fontSize: 24
+  },
+  contentContainer: {
+    width: window.width,
+
+    ...Platform.select({
+      ios: {
+        paddingHorizontal: 30,
+      },
+
+      android: {
+        paddingHorizontal: 0,
+      }
+    })
+  },
   statLabel: {
+    fontSize: 16,
     textAlign: 'center',
     textAlignVertical : 'center',
     color: 'white',
